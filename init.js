@@ -15,11 +15,25 @@
 
 
 
+function formatDate(date)
+{
+  date2= new Date(date);
+  return date2.getFullYear()+"-"+(date2.getMonth()+1)+"-"+date2.getDate();
+}
+
 function onClickFetchData(){
 
+  
   let ticker = document.getElementById("input_ticker").value;
   let apikey = document.getElementById("input_apikey").value;
 
+  start = document.getElementById("start_date").value;
+  end = document.getElementById("end_date").value;
+  start2=formatDate(start);
+  end2=formatDate(end);
+
+  console.log(start2+" "+end2);
+  
    $("#btn_fetch_data").hide();
    $("#load_fetch_data").show();
 
@@ -51,6 +65,8 @@ function onClickFetchData(){
 
         //let index = 0;
         for(let date in daily){
+          if(date>=start2 && date<=end2){
+            console.log(date);
           stocks.push( [  
           parseFloat(daily[date]['1. open']),
           parseFloat(daily[date]['4. close']),
@@ -62,8 +78,9 @@ function onClickFetchData(){
           stock_date.push(date);
          
          // index++;
+         }
         }
-
+        
         stocks.reverse();
         volume.reverse();
         stock_date.reverse();
@@ -1477,3 +1494,5 @@ $('#trainbutton').click(function(){
 // [total_investment.toFixed(2), total_gain.toFixed(2), stock_changes.toFixed(2),
 //   stock_changes_percent.toFixed(2),(val['gain_crude_oil']*100).toFixed(2),(val['gain_gold']*100).toFixed(2)])
 // }
+
+

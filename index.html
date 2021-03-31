@@ -1,14 +1,16 @@
 <html>
 <head>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <style>
   .close-first{
     display: none;
   }
   </style>
-</head><br>
+</head>
+
+<body>
 <div class="row" style="padding-left:10px;padding-right:10px">
   <ul class="collapsible" data-collapsible="accordion">
     <li>
@@ -98,30 +100,7 @@
 <div class="section" style="background-color:#ffebee" id="div_data">
   <div class="container">
     <h1 class="header">Get Stocks Data</h1>
-    <p class="lead">
-
-    </p>
-    <p>
-      <!-- [purpose of this step, fun for the reader] -->
-      Before we can train our neural network and make any predictions, we will first require data. The type of data we are looking for is time series: a sequence of numbers in chronological order. A good starting place to fetch these data is from <a href="https://www.alphavantage.co" target="_blank">alphavantage.co</a>. This API allows us to retrieve chronological data on specific company stocks prices from the last 20 years.
-    </p>
-    <p>
-      The API yields the following fields:
-      <ol>
-        <li>open price</li>
-        <li>highest price of that day</li>
-        <li>lowest price of that day</li>
-        <li>closing price</li>
-        <li>volume</li>
-      </ol>
-    </p>
-    <p>
-      To prepare training dataset for our neural network, we will be using closing stocks price; which also means that we will be aiming to predict future closing price.
-    </p>
-    <p>
-      <!-- [how to use, what you want your reader to do after you end, as simple and obvious] -->
-      Use <i>demo</i> API key to fetch <i>Microsoft Corporation</i> prices or <a href="https://www.alphavantage.co/support/#api-key" target="_blank">get your own API key</a> for other stocks.
-    </p>
+    
   </div>
 
   <div class="container">
@@ -141,31 +120,27 @@
           <small class="form-text text-muted">You can claim your API key from <a href="https://www.alphavantage.co/support/#api-key" target="_blank">alphavantage.co</a></small>
         </div>
       </div>
-      <!-- <div class="col m4"> -->
 
-        <!-- <div class="input-field col s12">
-          <select onchange="onClickChangeDataFreq(this)">
-            <option value="Weekly" onchange="onClickChangeDataFreq('Weekly')" selected>Weekly</option>
-            <option value="Daily" onchange="onClickChangeDataFreq('Daily')">Daily</option>
-          </select>
-          <label>Data Temporal Resolutions</label>
-        </div> -->
+    </div>      
 
-        
-
-        <!-- <div class="dropdown">
-          <div class="input-field col s12">
-            <label for="input_apikey">Data Temporal Resolutions</label>
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="input_datafreq" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Weekly
-            </button>
-            <div class="dropdown-menu" aria-labelledby="input_datafreq">
-              <a class="dropdown-item" onclick="onClickChangeDataFreq('Weekly')">Weekly</a>
-              <a class="dropdown-item" onclick="onClickChangeDataFreq('Daily')">Daily</a>
-            </div>
-          </div>
-        </div> -->
+      
+      
+      <div class="row">
+      <div class="col m4">
+        <div class="input-field col s12">
+          <label for="start_date">Start date</label>
+          <input type="text" class="datepicker" id="start_date" placeholder="Select date">
+        </div>
       </div>
+      <div class="col m4">
+        <div class="input-field col s12">
+          <label for="end_date">End date</label>
+          <input type="text" class="datepicker" id="end_date" placeholder="Select date">
+        </div>
+      </div>
+      </div>
+        
+      
       <div class="col s12">
         <button class="waves-effect waves-light btn" id="btn_fetch_data" onclick="onClickFetchData()">Fetch Data</button>
         <!-- <div class="spinner-border" id="load_fetch_data" style="display:none"></div> -->
@@ -183,20 +158,9 @@
         </div>
 
       </div>
-    </div>
+    
 
-    <div class="row" id="div_container_linegraph" style="display:none">
-      <div class="col s12">
-        <div class="card z-depth-5">
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4" id="div_linegraph_data_title">Card Title<</span>
-            <div >
-              <div id="div_linegraph_data" style="width:100%; height:350px;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
 
   </div>
 </div>
@@ -247,8 +211,8 @@
 <div class="row center" id="color-investment">
 </div>
 <script src="js/tf.js"></script>
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/materialize.min.js"></script>
+<script src="js/jquery-3.6.0.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
 <script src="js/d3.v3.min.js"></script>
 <script src="js/numeric-1.2.6.min.js"></script>
 <script src="js/numjs.min.js"></script>
@@ -258,3 +222,10 @@
 <script src="js/papaparse.min.js"></script>
 <!-- <script src="data/google.js"> </script> -->
 <script src="init.js"> </script>
+<script>
+  $(document).ready(function(){
+    $('.datepicker').datepicker();
+  });
+</script>
+</body>
+</html>
