@@ -67,6 +67,9 @@ function onClickFetchData(){
         stocks.reverse();
         volume.reverse();
         stock_date.reverse();
+        close = stocks.map(function(el, idx) {
+          return el[1];
+        }) ;
 
         //data_raw.reverse();
 
