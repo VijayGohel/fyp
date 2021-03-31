@@ -105,6 +105,10 @@ function onClickFetchData(){
 stocks = [];
 volume = [];
 stock_date = [];
+stocks2 = [];
+volume2 = [];
+stock_date2 = [];
+close2=[];
 var color_list = ['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'];
 var colors = ['#5793f3', '#d14a61', '#675bba','#b62f46'];
 // var close = GOOGLE['data'].map(function(el, idx) {
@@ -186,6 +190,7 @@ function completeFn(results) {
     return el[1];
   })
   plot_stock();
+  
 }
 
 var csv, config = buildConfig();
@@ -496,6 +501,15 @@ function plot_stock(){
 
   var chart_stock = echarts.init(document.getElementById('div_output'));
   chart_stock.setOption(option,true);
+
+  stocks2=stocks;
+  stocks=[];
+  stock_date2=stock_date;
+  stock_date=[];
+  volume2=volume;
+  volume=[];
+  close2=close;
+  close=[];
 }
 //plot_stock();
 
@@ -531,11 +545,10 @@ $('#trainbutton').click(function(){
     return
   }
   setTimeout(function(){
-    minmax_scaled = minmax_1d(close);
+    minmax_scaled = minmax_1d(close2);
     timestamp = parseInt($('#timestamp').val())
     epoch = parseInt($('#epoch').val())
     future = parseInt($('#future').val())
-    console.log("Hello");
     X_scaled = minmax_scaled.scaled.slice([0],[Math.floor(minmax_scaled.scaled.shape[0]/timestamp)*timestamp+1])
     cells = [tf.layers.lstmCell({units: parseInt($('#sizelayer').val())})];
     rnn = tf.layers.rnn({cell: cells, returnSequences: true,returnState:true});
@@ -594,7 +607,7 @@ $('#trainbutton').click(function(){
         predicted_val = tf_nj_list_flatten(reverse_minmax_1d(tf.tensor(tensor_output_predict),minmax_scaled['min'],minmax_scaled['max']))
         predicted_val = smoothing_line(predicted_val,parseFloat($('#smooth').val()))
         $('#div_output').attr('style','height:450px;');
-        new_date = stock_date.slice()
+        new_date = stock_date2.slice()
         for(var k = 0; k < future; k+=1){
           somedate = new Date(new_date[new_date.length-1])
           somedate.setDate(somedate.getDate() + 1)
@@ -661,7 +674,7 @@ $('#trainbutton').click(function(){
           }, {
             type: 'category',
             gridIndex: 1,
-            data: stock_date,
+            data: stock_date2,
             scale: true,
             boundaryGap : false,
             splitLine: {show: false},
@@ -746,11 +759,11 @@ $('#trainbutton').click(function(){
                 color: '#140'
               }
             },
-            data: volume
+            data: volume2
           }, {
             type: 'candlestick',
             name: 'STOCK',
-            data: stocks,
+            data: stocks2,
             itemStyle: {
               normal: {
                 color: '#ef232a',
@@ -934,7 +947,7 @@ $('#trainbutton').click(function(){
         }, {
           type: 'category',
           gridIndex: 1,
-          data: stock_date,
+          data: stock_date2,
           scale: true,
           boundaryGap : false,
           splitLine: {show: false},
@@ -1019,11 +1032,11 @@ $('#trainbutton').click(function(){
               color: '#140'
             }
           },
-          data: volume
+          data: volume2
         }, {
           type: 'candlestick',
           name: 'STOCK',
-          data: stocks,
+          data: stocks2,
           markPoint: {
             data: markpoints
           },
