@@ -1,19 +1,3 @@
-// $(document).ready(function(){
-//   $('select').formSelect();
-// });
-
-// document.addEventListener('DOMContentLoaded', function() {
-//   var elems = document.querySelectorAll('select');
-//   var instances = M.FormSelect.init(elems, options);
-// });
-
-// function onClickChangeDataFreq(freq){
-//   console.log(freq.value);
-//   data_temporal_resolutions = freq.value;
-//   // $("#input_datafreq").text(freq);
-// }
-
-
 
 function formatDate(date)
 {
@@ -29,44 +13,42 @@ function onClickFetchData(){
 
   start = document.getElementById("start_date").value;
   end = document.getElementById("end_date").value;
-  start2=formatDate(start);
-  end2=formatDate(end);
+  start2=new Date(formatDate(start));
+  end2=new Date(formatDate(end));
 
-  console.log(start2+" "+end2);
+  
   
    $("#btn_fetch_data").hide();
    $("#load_fetch_data").show();
 
   let requestUrl = "";
-  // if(data_temporal_resolutions == 'Daily'){
+  
     requestUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol="+ticker+"&outputsize=full&apikey="+apikey;
-  // }else{
-  //   requestUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol="+ticker+"&apikey="+apikey;
-  // }
+  
 
   $.getJSON(requestUrl
     ,function(data){
       
-      //let message = "";
-      // $("#div_container_linegraph").show();
+      
 
       let daily = [];
-      // if(data_temporal_resolutions == 'Daily'){
-        daily = data['Time Series (Daily)'];
-      // }else{
-      //   daily = data['Weekly Time Series'];
-      // }
       
-      if(daily){
+        daily = data['Time Series (Daily)'];
+      
+      
+      
         let symbol = data['Meta Data']['2. Symbol'];
         let last_refreshed = data['Meta Data']['3. Last Refreshed'];
 
-        // sma_vec = [];
+        
 
-        //let index = 0;
+        
         for(let date in daily){
-          if(date>=start2 && date<=end2){
-            console.log(date);
+          newDate= new Date(date);
+          
+          if(newDate >= start2 && newDate <= end2){
+            console.log(newDate.toString());
+          
           stocks.push( [  
           parseFloat(daily[date]['1. open']),
           parseFloat(daily[date]['4. close']),
@@ -77,7 +59,7 @@ function onClickFetchData(){
           volume.push(daily[date]['6. volume']);
           stock_date.push(date);
          
-         // index++;
+         
          }
         }
         
@@ -88,30 +70,15 @@ function onClickFetchData(){
           return el[1];
         }) ;
 
-        //data_raw.reverse();
-
-       // message = "Symbol: " + symbol + " (last refreshed " + last_refreshed + ")";
+        
 
          $("#btn_fetch_data").show();
          $("#load_fetch_data").hide();
-        // $("#div_linegraph_data_title").text(message);
-
-        // if(data_raw.length > 0){
-        //   timestamps = data_raw.map(function (val) { return val['timestamp']; });
-        //   prices = data_raw.map(function (val) { return val['price']; });
-
-        //   // let graph_plot = document.getElementById('div_linegraph_data');
-        //   // Plotly.newPlot( graph_plot, [{ x: timestamps, y: prices, name: "Stocks Prices" }], { margin: { t: 0 } } );
-        //   //console.log(timestamps+" "+prices);
-        plot_stock();
-        // }
         
-        // $("#div_container_getsma").show();
-        // $("#div_container_getsmafirst").hide();
+        plot_stock();
+        
 
-      }else{
-        $("#div_linegraph_data").text( data['Information'] );
-      }
+     
 
     }
   );
@@ -298,7 +265,7 @@ function calculateMA(dayCount, data) {
     }
     result.push((sum / dayCount).toFixed(2));
   }
-  console.log(dayCount+" "+result.length);
+  
   return result;
 }
 
